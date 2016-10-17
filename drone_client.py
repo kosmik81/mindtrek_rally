@@ -1,7 +1,4 @@
 import paho.mqtt.client as mqtt
-import curses
-
-
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
@@ -15,14 +12,20 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
 
-client = mqtt.Client()
-client.on_connect = on_connect
-client.on_message = on_message
+def turn_right():
+    pass
 
-client.connect("54.93.150.126", 22, 60)
+FORWARD = {"m1" : "1", "m2" : "2", "m_up" : "20", "time" : "200", "command_id" : "1"}
 
-# Blocking call that processes network traffic, dispatches callbacks and
-# handles reconnecting.
-# Other loop*() functions are available that give a threaded interface and a
-# manual interface.
-client.loop_forever()
+if __name__ == '__main__':
+    client = mqtt.Client(protocol=mqtt.MQTTv31)
+    client.on_connect = on_connect
+    client.on_message = on_message
+
+    client.connect("54.93.150.126", 1883, 60)
+
+    # Blocking call that processes network traffic, dispatches callbacks and
+    # handles reconnecting.
+    # Other loop*() functions are available that give a threaded interface and a
+    # manual interface.
+    client.loop_forever()
