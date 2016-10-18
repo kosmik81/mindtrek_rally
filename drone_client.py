@@ -3,6 +3,7 @@ import paho.mqtt.publish as publish
 import json
 import time
 import curses
+import kompassi2
 
 command_id = 0
 
@@ -19,6 +20,8 @@ curses.noecho()
 curses.curs_set(0)
 screen.keypad(1)
 
+komp = kompassi2.Kompassi()
+
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
@@ -27,16 +30,18 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-    print(msg.topic+" "+str(msg.payload))
+#    print(msg.topic+" "+str(msg.payload))
     payload = json.loads(msg.payload)
     command_id = payload["command_id"]
-    print("korkeus: {}".format(int(payload.get("y"))))
-    if int(payload.get("y")) >= LOCKED_LEVEL:
-        move(UP)
+#    print("korkeus: {}".format(int(payload.get("y"))))
+    print "heading: {}".format(komp.bearing((float(payload["x"]), float(payload["y"]), float(payload["z"]))))
+#    if int(payload.get("y")) >= LOCKED_LEVEL:
+#        move(UP)
 
 
 def on_log(mqttc, userdata, level, string):
-    print(string)
+    pass
+    #print(string)
 
 
 def move(command_dict):
