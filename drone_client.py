@@ -12,6 +12,7 @@ UP = {"m1" : "0", "m2" : "0", "m_up" : "15", "time" : "40", "command_id" : "5"}
 LEFT = {"m1" : "0", "m2" : "1", "m_up" : "5", "time" : "15", "command_id" : "5"}
 RIGHT = {"m1" : "2", "m2" : "0", "m_up" : "5", "time" : "15", "command_id" : "5"}
 
+LOCKED_LEVEL = -110
 
 screen = curses.initscr()
 curses.noecho()
@@ -29,6 +30,9 @@ def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
     payload = json.loads(msg.payload)
     command_id = payload["command_id"]
+    print("korkeus: {}".format(int(msg.payload.get("y"))))
+    if int(msg.payload.get("y")) <= LOCKED_LEVEL:
+        move(UP)
 
 
 def on_log(mqttc, userdata, level, string):
