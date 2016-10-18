@@ -20,5 +20,15 @@ class TestSomething(unittest.TestCase):
 
         for item in range(1, 15):
             print drone_client.average_of_latest_values("joku", item)
+
+    def test_steering(self):
+        self.assertEqual("forward", drone_client.steering(210, "display"))
+        self.assertEqual("right", drone_client.steering(230, "display"))
+        self.assertEqual("left", drone_client.steering(190, "display"))
+
+        self.assertEqual("right", drone_client.steering(120, "electricity"))
+        self.assertEqual("forward", drone_client.steering(140, "electricity"))
+        self.assertEqual("left", drone_client.steering(160, "electricity"))
+
 if __name__ == '__main__':
     unittest.main()

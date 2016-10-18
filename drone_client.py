@@ -7,11 +7,11 @@ import math
 import kompassi2
 command_id = 0
 
-REVERSE = {"m1" : "1", "m2" : "2", "m_up" : "0", "time" : "80", "command_id" : "5"}
-FORWARD = {"m1" : "2", "m2" : "1", "m_up" : "0", "time" : "80", "command_id" : "5"}
-UP = {"m1" : "0", "m2" : "0", "m_up" : "15", "time" : "40", "command_id" : "5"}
-LEFT = {"m1" : "0", "m2" : "1", "m_up" : "5", "time" : "15", "command_id" : "5"}
-RIGHT = {"m1" : "2", "m2" : "0", "m_up" : "5", "time" : "15", "command_id" : "5"}
+REVERSE = {"m1" : "1", "m2" : "2", "m_up" : "4", "time" : "20", "command_id" : "5"}
+FORWARD = {"m1" : "2", "m2" : "1", "m_up" : "4", "time" : "80", "command_id" : "5"}
+UP = {"m1" : "0", "m2" : "0", "m_up" : "4", "time" : "20", "command_id" : "5"}
+LEFT = {"m1" : "0", "m2" : "1", "m_up" : "4", "time" : "20", "command_id" : "5"}
+RIGHT = {"m1" : "2", "m2" : "0", "m_up" : "4", "time" : "20", "command_id" : "5"}
 latest_values = []
 
 LOCKED_LEVEL = -110
@@ -21,7 +21,9 @@ curses.curs_set(0)
 screen.keypad(1)
 
 komp = kompassi2.Kompassi()
-
+global gogo
+gogo = 0
+move_up = 0
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
@@ -36,20 +38,69 @@ def on_message(client, userdata, msg):
     #print "beacon: {4}, rssi: {0}, x: {1}, y: {2}, z: {3}".format(payload["rssi"], payload["x"], payload["y"], payload["z"], payload["baddr"])
     #if "E1:92:13:FC:20:7D" == payload["baddr"]:
     #print average_of_latest_values(payload["baddr"], int(payload["rssi"]))
-
+    goal = "display"
+    #distance = 100
+    distance = None
     try:
         if "57:D7:D5:72:8D:F1" in payload["baddr"]:
             print "near: {0} meters".format(calculate_distance(average_of_latest_values(payload["baddr"], int(payload["rssi"]))))
-        if "6F" in payload["baddr"]:
+            if goal == "display":
+                distance = calculate_distance(average_of_latest_values(payload["baddr"], int(payload["rssi"])))
+                print "distance set to {0} for {1}".format(distance, goal)
+        elif "6F" in payload["baddr"]:
             print "far away: {0} meters".format(calculate_distance(average_of_latest_values(payload["baddr"], int(payload["rssi"]))))
+            if goal == "electricity":
+                distance = calculate_distance(average_of_latest_values(payload["baddr"], int(payload["rssi"])))
+                print "distance set to {0} for {1}".format(distance, goal)
     except Exception as e:
         print (e)
+
+    if distance and distance < 1:
+        print "Goal changed to {0}".format(goal)
+        goal = "electricity"
+
+
     command_id = payload["command_id"]
     #    print("korkeus: {}".format(int(payload.get("y"))))
-    print "heading: {}".format(komp.bearing((float(payload["x"]), float(payload["y"]), float(payload["z"]))))
+    #print "heading: {}".format(komp.bearing((float(payload["x"]), float(payload["y"]), float(payload["z"]))))
+    direction = komp.bearing((float(payload["x"]), float(payload["y"]), float(payload["z"])))
+
+    global gogo
+    if gogo <= 50:
+        gogo += 1
+        #print "do not move!"
+    elif gogo > 50 and distance:
+        move(steering(direction, goal))
+        print "move to {0} with direction {1}!".format(goal, direction)
+        gogo = 0
+
+    global move_up
+    if move_up <= 12:
+        pass
+        move_up += 1
+    else:
+        move(UP)
+        move_up = 0
 #    if int(payload.get("y")) >= LOCKED_LEVEL:
 #        move(UP)
 
+
+def steering(direction, target):
+    #time.sleep(2)
+    if target == "display":
+        if int(direction) >= 230:
+            return RIGHT
+        elif int(direction) <= 190:
+            return LEFT
+        else:
+            return FORWARD
+    elif target == "electricity":
+        if int(direction) >= 160:
+            return LEFT
+        elif int(direction) <= 120:
+            return RIGHT
+        else:
+            return FORWARD
 
 
 def average_of_latest_values(baddr, rssi):
