@@ -4,7 +4,7 @@ import json
 import time
 import curses
 import math
-
+import kompassi2
 command_id = 0
 
 REVERSE = {"m1" : "1", "m2" : "2", "m_up" : "0", "time" : "80", "command_id" : "5"}
@@ -14,10 +14,13 @@ LEFT = {"m1" : "0", "m2" : "1", "m_up" : "5", "time" : "15", "command_id" : "5"}
 RIGHT = {"m1" : "2", "m2" : "0", "m_up" : "5", "time" : "15", "command_id" : "5"}
 latest_values = []
 
+LOCKED_LEVEL = -110
 screen = curses.initscr()
 curses.noecho()
 curses.curs_set(0)
 screen.keypad(1)
+
+komp = kompassi2.Kompassi()
 
 
 def on_connect(client, userdata, flags, rc):
@@ -42,6 +45,10 @@ def on_message(client, userdata, msg):
     except Exception as e:
         print (e)
     command_id = payload["command_id"]
+    #    print("korkeus: {}".format(int(payload.get("y"))))
+    print "heading: {}".format(komp.bearing((float(payload["x"]), float(payload["y"]), float(payload["z"]))))
+#    if int(payload.get("y")) >= LOCKED_LEVEL:
+#        move(UP)
 
 
 
