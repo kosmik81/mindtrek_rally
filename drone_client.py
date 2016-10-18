@@ -6,11 +6,11 @@ import curses
 
 command_id = 0
 
-FORWARD = {"m1" : "1", "m2" : "2", "m_up" : "10", "time" : "100", "command_id" : "5"}
-REVERSE = {"m1" : "2", "m2" : "1", "m_up" : "0", "time" : "100", "command_id" : "5"}
-UP = {"m1" : "0", "m2" : "0", "m_up" : "20", "time" : "100", "command_id" : "5"}
-LEFT = {"m1" : "0", "m2" : "1", "m_up" : "10", "time" : "30", "command_id" : "5"}
-RIGHT = {"m1" : "2", "m2" : "0", "m_up" : "10", "time" : "30", "command_id" : "5"}
+FORWARD = {"m1" : "1", "m2" : "2", "m_up" : "0", "time" : "80", "command_id" : "5"}
+REVERSE = {"m1" : "2", "m2" : "1", "m_up" : "0", "time" : "80", "command_id" : "5"}
+UP = {"m1" : "0", "m2" : "0", "m_up" : "15", "time" : "40", "command_id" : "5"}
+LEFT = {"m1" : "0", "m2" : "1", "m_up" : "0", "time" : "15", "command_id" : "5"}
+RIGHT = {"m1" : "2", "m2" : "0", "m_up" : "0", "time" : "15", "command_id" : "5"}
 
 
 screen = curses.initscr()
