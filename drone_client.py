@@ -30,8 +30,8 @@ def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
     payload = json.loads(msg.payload)
     command_id = payload["command_id"]
-    print("korkeus: {}".format(int(msg.payload.get("y"))))
-    if int(msg.payload.get("y")) <= LOCKED_LEVEL:
+    print("korkeus: {}".format(int(payload.get("y"))))
+    if int(payload.get("y")) >= LOCKED_LEVEL:
         move(UP)
 
 
