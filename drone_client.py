@@ -6,11 +6,11 @@ import curses
 
 command_id = 0
 
-FORWARD = {"m1" : "1", "m2" : "2", "m_up" : "0", "time" : "80", "command_id" : "5"}
-REVERSE = {"m1" : "2", "m2" : "1", "m_up" : "0", "time" : "80", "command_id" : "5"}
+REVERSE = {"m1" : "1", "m2" : "2", "m_up" : "0", "time" : "80", "command_id" : "5"}
+FORWARD = {"m1" : "2", "m2" : "1", "m_up" : "0", "time" : "80", "command_id" : "5"}
 UP = {"m1" : "0", "m2" : "0", "m_up" : "15", "time" : "40", "command_id" : "5"}
-LEFT = {"m1" : "0", "m2" : "1", "m_up" : "0", "time" : "15", "command_id" : "5"}
-RIGHT = {"m1" : "2", "m2" : "0", "m_up" : "0", "time" : "15", "command_id" : "5"}
+LEFT = {"m1" : "0", "m2" : "1", "m_up" : "5", "time" : "15", "command_id" : "5"}
+RIGHT = {"m1" : "2", "m2" : "0", "m_up" : "5", "time" : "15", "command_id" : "5"}
 
 
 screen = curses.initscr()
@@ -78,10 +78,10 @@ if __name__ == '__main__':
             move(FORWARD)
         elif event == curses.KEY_LEFT:
             print "The User Pressed LEFT\n"
-            move(RIGHT)
+            move(LEFT)
         elif event == curses.KEY_RIGHT:
             print "The User Pressed RIGHT\n"
-            move(LEFT)
+            move(RIGHT)
         elif event == ord("u"):
             print "The User Pressed U\n"
             move(UP)
