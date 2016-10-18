@@ -40,12 +40,12 @@ def move(command_dict):
     command_dict = _update_command_id(command_dict)
     while not message_id and command_dict["command_id"] != command_id:
         res, message_id = client.publish("team4_write", json.dumps(command_dict))
-        print "RES: {0}".format(res)
-        print "MID: {0}".format(message_id)
+        print "RES: {0}\n".format(res)
+        print "MID: {0}\n".format(message_id)
 
 
 def on_publish(client, userdata, mid):
-    print "on publish;, userdata: {0}, mid: {1}".format(userdata, mid)
+    print "on publish;, userdata: {0}, mid: {1}\n".format(userdata, mid)
 
 
 def _update_command_id(command_dict):
@@ -75,6 +75,7 @@ if __name__ == '__main__':
             move(FORWARD)
         elif event == curses.KEY_DOWN:
             screen.addstr("The User Pressed DOWN\n")
+            move(REVERSE)
         elif event == curses.KEY_LEFT:
             screen.addstr("The User Pressed LEFT\n")
             move(LEFT)
