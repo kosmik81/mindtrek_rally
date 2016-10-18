@@ -72,16 +72,16 @@ if __name__ == '__main__':
             break
         elif event == curses.KEY_UP:
             print "The User Pressed UP\n"
-            move(FORWARD)
+            move(REVERSE)
         elif event == curses.KEY_DOWN:
             print "The User Pressed DOWN\n"
-            move(REVERSE)
+            move(FORWARD)
         elif event == curses.KEY_LEFT:
             print "The User Pressed LEFT\n"
-            move(LEFT)
+            move(RIGHT)
         elif event == curses.KEY_RIGHT:
             print "The User Pressed RIGHT\n"
-            move(RIGHT)
+            move(LEFT)
         elif event == ord("u"):
             print "The User Pressed U\n"
             move(UP)
